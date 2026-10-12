@@ -1,0 +1,53 @@
+{
+  "configVersion": "v3",
+  "app": {
+    "appId": 1130105,
+    "appName": "Vintage Grunge Fitness",
+    "appType": "watchface",
+    "version": {
+      "code": 19,
+      "name": "1.4.5"
+    },
+    "icon": "preview.png",
+    "cover": [
+      "preview.png"
+    ],
+    "vender": "Aniruddha DuttaChowdhury",
+    "description": "Vintage fitness dashboard for Amazfit Bip Max",
+    "_pikeCompatibled": 1
+  },
+  "runtime": {
+    "apiVersion": {
+      "minVersion": "3.0.0",
+      "target": "3.0.0",
+      "compatible": "3.0.0"
+    }
+  },
+  "permissions": [],
+  "targets": {
+    "432x514-amazfit-bip-max": {
+      "module": {
+        "watchface": {
+          "path": "watchface/index",
+          "lockscreen": 1
+        }
+      },
+      "platforms": [
+        {
+          "name": "Amazfit Bip Max",
+          "deviceSource": 11206915,
+          "st": "s",
+          "sr": "w432",
+          "dw": 432
+        }
+      ],
+      "designWidth": 432
+    }
+  },
+  "i18n": {
+    "en-US": {
+      "appName": "Vintage Grunge Fitness"
+    }
+  },
+  "defaultLanguage": "en-US"
+}

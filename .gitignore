@@ -1,0 +1,13 @@
+node_modules/
+.tools/
+.samples/
+.zepp*/
+.env
+.env.*
+*.pem
+*.key
+dist/
+zepp-install-url.txt
+zepp-qr-matrix.json
+Zepp-Install-QR*.png
+publication/
