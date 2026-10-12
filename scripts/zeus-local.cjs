@@ -1,6 +1,8 @@
+const projectRoot = require('path').resolve(__dirname, '..')
+process.chdir(projectRoot)
 const path = require('path')
 process.env.PATH = path.dirname(process.execPath) + path.delimiter + process.env.PATH
-const cli = path.join(__dirname, '.tools/zeus/node_modules/@zeppos/zeus-cli')
+const cli = path.join(projectRoot, '.tools/zeus/node_modules/@zeppos/zeus-cli')
 const fs = require('fs')
 const qrTerminal = require('./.tools/zeus/node_modules/qrcode-terminal')
 const generateQr = qrTerminal.generate
@@ -9,8 +11,8 @@ qrTerminal.generate = function (url, ...args) {
   const qr = new QRCode(-1, this.error)
   qr.addData(url)
   qr.make()
-  fs.writeFileSync(path.join(__dirname, 'zepp-install-url.txt'), url)
-  fs.writeFileSync(path.join(__dirname, 'zepp-qr-matrix.json'), JSON.stringify(qr.modules))
+  fs.writeFileSync(path.join(projectRoot, 'previews/zepp-install-url.txt'), url)
+  fs.writeFileSync(path.join(projectRoot, 'previews/zepp-qr-matrix.json'), JSON.stringify(qr.modules))
   return generateQr.call(this, url, ...args)
 }
 // Print the public authorization URL so a blocked browser launch can be completed manually.

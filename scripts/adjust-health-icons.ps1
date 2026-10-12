@@ -1,3 +1,4 @@
+$projectRoot = Split-Path -Parent $PSScriptRoot
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName System.Drawing
 Add-Type -ReferencedAssemblies System.Drawing -TypeDefinition @"
@@ -41,7 +42,7 @@ public static class TinyPositionEdit {
  }
 }
 "@
-[TinyPositionEdit]::Apply((Join-Path $PSScriptRoot 'revision-baseline-v1.4.0/background.png'),(Join-Path $PSScriptRoot 'tiny-edit-generated.png'),(Join-Path $PSScriptRoot 'assets/432x514-amazfit-bip-max/background.png'))
+[TinyPositionEdit]::Apply((Join-Path $projectRoot 'references/revision-baseline-v1.4.0/background.png'),(Join-Path $projectRoot 'artwork/tiny-edit-generated.png'),(Join-Path $projectRoot 'assets/432x514-amazfit-bip-max/background.png'))
 
 
 

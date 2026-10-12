@@ -1,3 +1,5 @@
+const projectRoot = require('path').resolve(__dirname, '..')
+process.chdir(projectRoot)
 const fs = require('fs')
 const vm = require('vm')
 const widgets = []
@@ -99,6 +101,6 @@ for(const w of widgets.filter(w=>w.show_level===showLevel && w.visible!==false))
   if(w.kind==='IMG_DATE'){add(w.day_en_array[2],w.day_startX,w.day_startY);add(w.day_en_array[9],w.day_startX+size(w.day_en_array[2])[0],w.day_startY)}
   if(w.kind==='IMG_LEVEL')add(w.image_array[49],w.x,w.y)
 }
-fs.writeFileSync('preview-layout.json',JSON.stringify(draw))
+fs.writeFileSync('previews/preview-layout.json',JSON.stringify(draw))
 if(!draw.length)throw new Error('Black screen: no visible assets')
 console.log(`Validated ${widgets.length} widgets, ${taps.length} tap zones, scene-specific initialization and ${draw.length} preview images (${showLevel===2?'AOD':'normal'}).`)

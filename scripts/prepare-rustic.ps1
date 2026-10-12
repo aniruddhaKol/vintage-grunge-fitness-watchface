@@ -1,4 +1,5 @@
-param([string]$Generated='rustic-generated.png')
+param([string]$Generated='artwork/rustic-generated.png')
+$projectRoot = Split-Path -Parent $PSScriptRoot
 Add-Type -AssemblyName System.Drawing
 Add-Type -ReferencedAssemblies System.Drawing -TypeDefinition @"
 using System;
@@ -32,5 +33,5 @@ public static class RusticAsset {
  }
 }
 "@
-[RusticAsset]::Apply((Join-Path $PSScriptRoot 'assets/432x514-amazfit-bip-max/background.png'),(Join-Path $PSScriptRoot $Generated),(Join-Path $PSScriptRoot 'rustic-background.png'))
+[RusticAsset]::Apply((Join-Path $projectRoot 'assets/432x514-amazfit-bip-max/background.png'),(Join-Path $projectRoot $Generated),(Join-Path $projectRoot 'artwork/rustic-background.png'))
 

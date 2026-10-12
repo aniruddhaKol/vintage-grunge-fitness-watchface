@@ -11,3 +11,7 @@ zepp-install-url.txt
 zepp-qr-matrix.json
 Zepp-Install-QR*.png
 publication/
+previews/*-layout.json
+previews/zepp-install-url.txt
+previews/zepp-qr-matrix.json
+previews/Zepp-Install-QR*.png

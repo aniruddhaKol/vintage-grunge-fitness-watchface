@@ -1,3 +1,4 @@
+$projectRoot = Split-Path -Parent $PSScriptRoot
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName System.Drawing
 Add-Type -ReferencedAssemblies System.Drawing -TypeDefinition @"
@@ -36,7 +37,7 @@ public static class CopySampleBorder {
  }
 }
 "@
-$root=Join-Path $PSScriptRoot 'assets/432x514-amazfit-bip-max'
+$root=Join-Path $projectRoot 'assets/432x514-amazfit-bip-max'
 foreach($name in @('background.png','aod-background.png')) {
- [CopySampleBorder]::Apply((Join-Path $PSScriptRoot "border-baseline-v1.3.9/$name"),(Join-Path $PSScriptRoot 'sample corners.png'),(Join-Path $root $name),(Join-Path $root 'rounded-corners.png'),($name -eq 'aod-background.png'))
+ [CopySampleBorder]::Apply((Join-Path $projectRoot "references/border-baseline-v1.3.9/$name"),(Join-Path $projectRoot 'artwork/sample corners.png'),(Join-Path $root $name),(Join-Path $root 'rounded-corners.png'),($name -eq 'aod-background.png'))
 }

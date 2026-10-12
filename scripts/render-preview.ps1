@@ -1,16 +1,17 @@
 param([switch]$Aod)
+$projectRoot = Split-Path -Parent $PSScriptRoot
 Add-Type -AssemblyName System.Drawing
-$root = Join-Path $PSScriptRoot 'assets/432x514-amazfit-bip-max'
+$root = Join-Path $projectRoot 'assets/432x514-amazfit-bip-max'
 $bmp = New-Object System.Drawing.Bitmap(432,514)
 $g = [System.Drawing.Graphics]::FromImage($bmp)
 $g.Clear([System.Drawing.Color]::Black)
-foreach ($item in (Get-Content (Join-Path $PSScriptRoot 'preview-layout.json') -Raw | ConvertFrom-Json)) {
+foreach ($item in (Get-Content (Join-Path $projectRoot 'previews/preview-layout.json') -Raw | ConvertFrom-Json)) {
   $img = [System.Drawing.Image]::FromFile((Join-Path $root $item.src))
   $g.DrawImageUnscaled($img,[int]$item.x,[int]$item.y)
   $img.Dispose()
 }
-$previewName = if ($Aod) {'watchface-aod-preview.png'} else {'watchface-preview.png'}
-$bmp.Save((Join-Path $PSScriptRoot $previewName),[System.Drawing.Imaging.ImageFormat]::Png)
+$previewName = if ($Aod) {'previews/watchface-aod-preview.png'} else {'previews/watchface-preview.png'}
+$bmp.Save((Join-Path $projectRoot $previewName),[System.Drawing.Imaging.ImageFormat]::Png)
 if ($Aod) {
   $lit = 0
   for($y=0;$y -lt 514;$y++) { for($x=0;$x -lt 432;$x++) { if($bmp.GetPixel($x,$y).ToArgb() -ne [System.Drawing.Color]::Black.ToArgb()) { $lit++ } } }

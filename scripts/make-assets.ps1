@@ -1,5 +1,6 @@
+$projectRoot = Split-Path -Parent $PSScriptRoot
 Add-Type -AssemblyName System.Drawing
-$root = Join-Path $PSScriptRoot 'assets/432x514-amazfit-bip-max'
+$root = Join-Path $projectRoot 'assets/432x514-amazfit-bip-max'
 function Save-Text($name, $value, $width, $height, $size, $color) {
   $bmp = New-Object System.Drawing.Bitmap($width, $height)
   $g = [System.Drawing.Graphics]::FromImage($bmp)
@@ -23,13 +24,13 @@ function Save-Text($name, $value, $width, $height, $size, $color) {
   $bmp.Save((Join-Path $root $name), [System.Drawing.Imaging.ImageFormat]::Png)
   $format.Dispose(); $brush.Dispose(); $font.Dispose(); $g.Dispose(); $bmp.Dispose()
 }
-$source = [System.Drawing.Image]::FromFile((Join-Path $PSScriptRoot 'background-source.png'))
+$source = [System.Drawing.Image]::FromFile((Join-Path $projectRoot 'artwork/background-source.png'))
 $background = New-Object System.Drawing.Bitmap(432,514)
 $g = [System.Drawing.Graphics]::FromImage($background)
 $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
 $g.Clear([System.Drawing.Color]::Black)
 # Read only the four 106px corner areas of the supplied outline reference.
-$sample = [System.Drawing.Bitmap]::FromFile((Join-Path $PSScriptRoot 'sample corners.png'))
+$sample = [System.Drawing.Bitmap]::FromFile((Join-Path $projectRoot 'artwork/sample corners.png'))
 if($sample.Width -ne 432 -or $sample.Height -ne 514) { throw 'Corner reference must be 432 x 514' }
 $leftEdge = @();$rightEdge = @()
 for($y=0;$y -lt 514;$y++) {
@@ -65,7 +66,7 @@ $rim = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(120,91,59)
 $g.DrawPath($rim,$shape)
 $rim.Dispose()
 $g.ResetClip()
-$aodSource = [System.Drawing.Image]::FromFile((Join-Path $PSScriptRoot 'aod-background-source.png'))
+$aodSource = [System.Drawing.Image]::FromFile((Join-Path $projectRoot 'artwork/aod-background-source.png'))
 $aodBackground = New-Object System.Drawing.Bitmap(432,514)
 $ag = [System.Drawing.Graphics]::FromImage($aodBackground)
 $ag.Clear([System.Drawing.Color]::Black)
@@ -210,10 +211,10 @@ for ($i=0;$i -le 100;$i++) {
 }
 
 # Apply the corner-only refinement after generating the original artwork.
-& (Join-Path $PSScriptRoot 'fix-corners.ps1')
-if(Test-Path (Join-Path $PSScriptRoot 'rustic-generated.png')) {
-  & (Join-Path $PSScriptRoot 'prepare-rustic.ps1')
-  Copy-Item (Join-Path $PSScriptRoot 'rustic-background.png') (Join-Path $root 'background.png')
+& (Join-Path $projectRoot 'scripts/fix-corners.ps1')
+if(Test-Path (Join-Path $projectRoot 'artwork/rustic-generated.png')) {
+  & (Join-Path $projectRoot 'scripts/prepare-rustic.ps1')
+  Copy-Item (Join-Path $projectRoot 'artwork/rustic-background.png') (Join-Path $root 'background.png')
 }
-& (Join-Path $PSScriptRoot 'match-sample-corners.ps1')
-& (Join-Path $PSScriptRoot 'adjust-health-icons.ps1')
+& (Join-Path $projectRoot 'scripts/match-sample-corners.ps1')
+& (Join-Path $projectRoot 'scripts/adjust-health-icons.ps1')

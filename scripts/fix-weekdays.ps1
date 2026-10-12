@@ -1,5 +1,6 @@
+$projectRoot = Split-Path -Parent $PSScriptRoot
 Add-Type -AssemblyName System.Drawing
-$root = Join-Path $PSScriptRoot 'assets/432x514-amazfit-bip-max'
+$root = Join-Path $projectRoot 'assets/432x514-amazfit-bip-max'
 function Save-Text($name, $value, $width, $height, $size, $color) {
   $bmp = New-Object System.Drawing.Bitmap($width, $height)
   $g = [System.Drawing.Graphics]::FromImage($bmp)
@@ -39,5 +40,5 @@ for($i=0;$i -lt 7;$i++) {
   $img.Dispose()
  }
 }
-$canvas.Save((Join-Path $PSScriptRoot 'weekday-validation.png'))
+$canvas.Save((Join-Path $projectRoot 'artwork/weekday-validation.png'))
 $graphics.Dispose();$canvas.Dispose()

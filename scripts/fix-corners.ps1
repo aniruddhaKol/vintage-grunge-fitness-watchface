@@ -1,3 +1,4 @@
+$projectRoot = Split-Path -Parent $PSScriptRoot
 Add-Type -AssemblyName System.Drawing
 Add-Type -ReferencedAssemblies System.Drawing -TypeDefinition @"
 using System;
@@ -84,9 +85,9 @@ public static class ReferenceCorners {
   }
 }
 "@
-$root=Join-Path $PSScriptRoot 'assets/432x514-amazfit-bip-max'
-[ReferenceCorners]::Apply((Join-Path $PSScriptRoot 'corner-baseline-v1.3.4/background.png'),(Join-Path $PSScriptRoot 'background-source.png'),(Join-Path $root 'background.png'),$false)
-[ReferenceCorners]::Apply((Join-Path $PSScriptRoot 'corner-baseline-v1.3.4/aod-background.png'),(Join-Path $PSScriptRoot 'aod-background-source.png'),(Join-Path $root 'aod-background.png'),$true)
+$root=Join-Path $projectRoot 'assets/432x514-amazfit-bip-max'
+[ReferenceCorners]::Apply((Join-Path $projectRoot 'references/corner-baseline-v1.3.4/background.png'),(Join-Path $projectRoot 'artwork/background-source.png'),(Join-Path $root 'background.png'),$false)
+[ReferenceCorners]::Apply((Join-Path $projectRoot 'references/corner-baseline-v1.3.4/aod-background.png'),(Join-Path $projectRoot 'artwork/aod-background-source.png'),(Join-Path $root 'aod-background.png'),$true)
 [ReferenceCorners]::Overlay((Join-Path $root 'rounded-corners.png'))
 
 
