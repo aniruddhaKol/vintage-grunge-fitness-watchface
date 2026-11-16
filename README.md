@@ -1,8 +1,10 @@
 # Vintage Grunge Fitness
 
-Zepp OS watchface for Amazfit Bip Max (432 × 514). Version 1.4.5.
+Zepp OS watchface for Amazfit Bip Max (432 × 514). Version 1.4.5. Approved in the Zepp watchface store.
 
 ![Preview](previews/watchface-preview.png)
+
+The main preview is the official Bip Max emulator capture used for the approved store submission, with transparent outer corners.
 
 ![Always-on display](previews/watchface-aod-preview.png)
 
