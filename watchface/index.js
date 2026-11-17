@@ -8,6 +8,13 @@ import {
 } from '@zos/router'
 
 const digits = name => Array.from({ length: 10 }, (_, i) => `${name}-${i}.png`)
+// IMG_LEVEL counts frames from 1, including the empty 0% frame.
+const batteryFrameLevel = charge => charge + 1
+const batteryIconSource = charge => {
+  if (charge < 20) return 'battery-icon-red.png'
+  if (charge <= 50) return 'battery-icon-amber.png'
+  return 'battery-icon-green.png'
+}
 const normal = hmUI.show_level.ONLY_NORMAL
 WatchFace({
   build() {
@@ -28,9 +35,9 @@ WatchFace({
     const number = (type,x,y,w,h,font,extra={}) => hmUI.createWidget(hmUI.widget.TEXT_IMG, {
       x,y,w,h,type,font_array: digits(font),h_space: 0,align_h: hmUI.align.CENTER_H,show_level:normal,...extra
     })
-    number(hmUI.data_type.HEART,58,65,74,44,'health')
+    number(hmUI.data_type.HEART,62,65,75,44,'health')
     number(hmUI.data_type.SPO2,194,65,75,44,'health')
-    number(hmUI.data_type.CAL,331,65,78,44,'cal')
+    number(hmUI.data_type.CAL,327,65,78,44,'cal')
     number(hmUI.data_type.SUN_RISE,134,296,65,27,'small',{dot_image:'colon.png'})
     number(hmUI.data_type.SUN_SET,229,296,65,27,'small',{dot_image:'colon.png'})
     number(hmUI.data_type.WEATHER_CURRENT,350,278,62,35,'temp',{negative_image:'minus.png',unit_en:'degree.png',unit_sc:'degree.png',unit_tc:'degree.png'})
@@ -39,23 +46,36 @@ WatchFace({
     const week = Array.from({length:7},(_,i)=>`week-${i}.png`)
     hmUI.createWidget(hmUI.widget.IMG_WEEK,{x:23,y:280,week_en:week,week_sc:week,week_tc:week,show_level:normal})
     const day = digits('small')
+    const month = Array.from({ length: 12 }, (_, i) => `month-${i}.png`)
     hmUI.createWidget(hmUI.widget.IMG_DATE,{
+      month_startX:36,month_startY:309,month_en_array:month,month_sc_array:month,month_tc_array:month,
+      month_is_character:true,month_follow:0,month_align:hmUI.align.LEFT,
       day_startX:76,day_startY:280,day_en_array:day,day_sc_array:day,day_tc_array:day,
       day_zero:1,day_space:0,day_align:hmUI.align.LEFT,show_level:normal
     })
     this.battery = new Battery()
+    const readCharge = () => Math.max(0,Math.min(100,this.battery.getCurrent()))
+    const charge = readCharge()
     const batteryBar = hmUI.createWidget(hmUI.widget.IMG_LEVEL,{
-      x:79,y:459,image_array:Array.from({length:101},(_,i)=>`battery-level-${i}.png`),
-      image_length:101,level:Math.max(0,Math.min(100,this.battery.getCurrent())),show_level:normal
+      x:89,y:456,image_array:Array.from({length:101},(_,i)=>`battery-level-${i}.png`),
+      image_length:101,level:batteryFrameLevel(charge),show_level:normal
     })
-    this.updateBattery = () => batteryBar.setProperty(hmUI.prop.LEVEL,Math.max(0,Math.min(100,this.battery.getCurrent())))
+    const iconLayout = {x:50,y:441,w:20,h:39}
+    const batteryIcon = hmUI.createWidget(hmUI.widget.IMG,{
+      ...iconLayout,src:batteryIconSource(charge),show_level:normal
+    })
+    this.updateBattery = () => {
+      const currentCharge = readCharge()
+      batteryBar.setProperty(hmUI.prop.LEVEL,batteryFrameLevel(currentCharge))
+      batteryIcon.setProperty(hmUI.prop.MORE,{...iconLayout,src:batteryIconSource(currentCharge)})
+    }
     this.battery.onChange(this.updateBattery)
     this.highlights = []
     hmUI.createWidget(hmUI.widget.WIDGET_DELEGATE,{resume_call:() => {
       this.updateBattery()
       this.highlights.forEach(w => w.setProperty(hmUI.prop.VISIBLE,false))
     }})
-    number(hmUI.data_type.BATTERY,345,455,55,25,'battery',{unit_en:'percent.png',unit_sc:'percent.png',unit_tc:'percent.png'})
+    number(hmUI.data_type.BATTERY,345,451,56,29,'battery',{unit_en:'percent.png',unit_sc:'percent.png',unit_tc:'percent.png'})
     hmUI.createWidget(hmUI.widget.IMG,{x:0,y:0,src:'rounded-corners.png',show_level:normal})
     this.vibration = new Vibrator()
     const highlight = (x,y,w,h,color) => {
@@ -128,11 +148,30 @@ WatchFace({
     hmUI.createWidget(hmUI.widget.TEXT_IMG,{x:81,y:357,w:119,h:45,type:hmUI.data_type.STEP,font_array:digits('aod-activity'),align_h:hmUI.align.LEFT,show_level:aod})
     hmUI.createWidget(hmUI.widget.IMG,{x:279,y:334,src:'aod-distance-label.png',show_level:aod})
     hmUI.createWidget(hmUI.widget.TEXT_IMG,{x:279,y:357,w:126,h:45,type:hmUI.data_type.DISTANCE,font_array:digits('aod-distance'),dot_image:'aod-dot.png',unit_en:'aod-km.png',unit_sc:'aod-km.png',unit_tc:'aod-km.png',imperial_unit_en:'aod-mi.png',imperial_unit_sc:'aod-mi.png',imperial_unit_tc:'aod-mi.png',align_h:hmUI.align.LEFT,show_level:aod})
-    hmUI.createWidget(hmUI.widget.IMG,{x:52,y:425,src:'aod-charge-label.png',show_level:aod})
-    hmUI.createWidget(hmUI.widget.IMG,{x:40,y:444,src:'aod-zero-percent.png',show_level:aod})
-    hmUI.createWidget(hmUI.widget.TEXT_IMG,{x:345,y:444,w:62,h:30,type:hmUI.data_type.BATTERY,font_array:digits('aod-bat'),unit_en:'aod-bat-percent.png',unit_sc:'aod-bat-percent.png',unit_tc:'aod-bat-percent.png',show_level:aod})
-    const battery = new Battery()
-    hmUI.createWidget(hmUI.widget.IMG_LEVEL,{x:83,y:447,image_array:Array.from({length:101},(_,i)=>`aod-battery-level-${i}.png`),image_length:101,level:Math.max(0,Math.min(100,battery.getCurrent())),show_level:aod})
+    this.battery = new Battery()
+    const readCharge = () => Math.max(0,Math.min(100,this.battery.getCurrent()))
+    const charge = readCharge()
+    const batteryBar = hmUI.createWidget(hmUI.widget.IMG_LEVEL,{
+      x:85,y:448,image_array:Array.from({length:101},(_,i)=>`aod-battery-level-${i}.png`),
+      image_length:101,level:batteryFrameLevel(charge),show_level:aod
+    })
+    const iconLayout = {x:50,y:434,w:20,h:39}
+    const iconSource = charge => `aod-${batteryIconSource(charge)}`
+    const batteryIcon = hmUI.createWidget(hmUI.widget.IMG,{
+      ...iconLayout,src:iconSource(charge),show_level:aod
+    })
+    this.updateBattery = () => {
+      const currentCharge = readCharge()
+      batteryBar.setProperty(hmUI.prop.LEVEL,batteryFrameLevel(currentCharge))
+      batteryIcon.setProperty(hmUI.prop.MORE,{...iconLayout,src:iconSource(currentCharge)})
+    }
+    this.battery.onChange(this.updateBattery)
+    hmUI.createWidget(hmUI.widget.WIDGET_DELEGATE,{resume_call:() => this.updateBattery()})
+    hmUI.createWidget(hmUI.widget.TEXT_IMG,{
+      x:343,y:442,w:60,h:30,type:hmUI.data_type.BATTERY,font_array:digits('aod-bat'),
+      unit_en:'aod-bat-percent.png',unit_sc:'aod-bat-percent.png',unit_tc:'aod-bat-percent.png',
+      align_h:hmUI.align.CENTER_H,show_level:aod
+    })
     hmUI.createWidget(hmUI.widget.IMG,{x:0,y:0,src:'rounded-corners.png',show_level:aod})
   },
   onInit() {},

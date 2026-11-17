@@ -1,6 +1,7 @@
 {
   "name": "app.adc.vintagegrungefitness",
-  "version": "1.4.5",
+  "version": "1.4.16",
   "private": true,
-  "description": "Vintage Grunge Fitness for Zepp OS"
+  "description": "Vintage Grunge Fitness for Zepp OS",
+  "author": "Aniruddha DuttaChowdhury"
 }
