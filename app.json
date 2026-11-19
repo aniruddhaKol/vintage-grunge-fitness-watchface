@@ -5,8 +5,8 @@
     "appName": "Vintage Grunge Fitness",
     "appType": "watchface",
     "version": {
-      "code": 30,
-      "name": "1.4.16"
+      "code": 34,
+      "name": "1.4.20"
     },
     "icon": "preview.png",
     "cover": [
@@ -23,7 +23,9 @@
       "compatible": "3.0.0"
     }
   },
-  "permissions": [],
+  "permissions": [
+    "data:user.hd.calorie"
+  ],
   "targets": {
     "432x514-amazfit-bip-max": {
       "module": {
